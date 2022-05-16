@@ -303,7 +303,7 @@ function incompletoTostify(campo)
         position: 'right',
         style: {                
             background: "red",
-            width: "80%",
+            width: "50%",
             borderRadius: "20px",
          }
      }).showToast();
