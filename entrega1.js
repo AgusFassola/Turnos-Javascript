@@ -46,8 +46,13 @@ function nuevoTurno(){
         let nodoTurnoNom=document.createElement("p");
         nodoTurnoNom.innerHTML=`Ingrese su nombre: <input id="nombre"></input><br></br>
                         Ingrese su apellido: <input id="apellido"></input><br></br>
-                        Ingrese su DNI: <input id="dni"></input><br></br>
-                        Ingrese el servicio: <input id="servicio"></input><br></br>
+                        Ingrese su DNI: <input type="number" id="dni"></input><br></br>
+                        Elija un servicio: <select id="servicio">
+                        <option value="Gimnasio">Gimnasio</option>
+                        <option value="Nutrición">Nutrición</option>
+                        <option value="Kinesiología">Kinesiología</option>
+                        </select>
+                        <br></br>
                         <button id="reservarHtml">RESERVAR</button>
                         <button id="cerrarReserva">CERRAR</button>`;
         console.log("nuevo turno");
@@ -96,6 +101,11 @@ function verificarContenido(nombre,apellido,dni,servicio){
         console.log("ingrese un dni");
         reservaVacia=true;
         incompletoTostify("tu DNI");
+    }else if(dni>=99999999){
+        console.log("dni grande")
+        reservaVacia=true;
+        incompletoTostify("un DNI válido");
+
 
     }else if(servicio===null || servicio===''){
         console.log("ingrese un servicio");
@@ -181,7 +191,7 @@ function buscarTurno(){
         buscarCont=1;
         const buscarT = document.querySelector("#buscar");
         let nodoBuscarTurno=document.createElement("p");
-        nodoBuscarTurno.innerHTML=`Ingrese su DNI: <input id="buscarDni"></input><br></br>
+        nodoBuscarTurno.innerHTML=`Ingrese su DNI: <input type="number" id="buscarDni"></input><br></br>
                                 <button id="buscarHtml">BUSCAR</button>
                                 <button id="cerrarBuscar">CERRAR</button>`;
 
@@ -207,16 +217,15 @@ function pedirDni()
 
 function buscandoDni(){
     const dni = document.querySelector("#buscarDni");
-//    dni.setAttribute("style","background-color: rgb(158, 204, 235)");
     let dniIngresado=dni.value;
+    if(dniIngresado===null || dniIngresado==='')
+    {incompletoTostify("un DNI");}
+
     let turnero =JSON.parse(localStorage.getItem("turnero"));
     let siEsta=turnero.some((x)=>x.dni.indexOf(dniIngresado)!==-1);
-
     siEsta ? turnoEncontrado(dniIngresado) : incorrectoTostify();
     dni.value="";
 }
-
-
 
 function limpiarBuscar()
 {
@@ -225,6 +234,7 @@ function limpiarBuscar()
     listaLimpia.innerHTML="";
     buscarCont=0;
 }
+
 function limpiarTurno()
 {
     console.log("limpiar turno")
@@ -232,12 +242,14 @@ function limpiarTurno()
     listaLimpia.innerHTML="";
     turnoCont=0;
 }
+
 function limpiarLista(){
 
     const listaLimpia = document.querySelector("div");
     listaLimpia.innerHTML="";
     listaCont=0;
 }
+
 function limpiarFamosos(){
 
     const listaLimpia = document.querySelector(".famosos");
@@ -246,11 +258,8 @@ function limpiarFamosos(){
 }
 
 function turnoEncontrado(dniIngresado){
-    //BUSCAR EL TURNO CON FIND
     let turnero =JSON.parse(localStorage.getItem("turnero"));
     let turnoEncontrado=turnero.find((turno)=>turno.dni===dniIngresado);
-    //console.log("Turno encontrado: ",turnoEncontrado);
-
     const busca = document.querySelector("#buscar");
     const nodoLiBusc=document.createElement("lu");
     nodoLiBusc.innerHTML=`TURNO ENCONTRADO: <br>
@@ -281,7 +290,7 @@ function encontradoTostify(){
 function incorrectoTostify()
 {
     Toastify({
-        text: "DNI INCORRECTO",
+        text: "NO SE ENCONTRÓ EL DNI",
         duration: 3000,
         gravity: 'top',
         position: 'right',
@@ -324,8 +333,6 @@ function reservadoTostify()
      }).showToast();
      console.log("reservado con tostify")
 }
-
-
 
 function listarTurnos()
   {
