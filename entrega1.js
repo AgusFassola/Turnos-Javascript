@@ -219,8 +219,10 @@ function buscandoDni(){
     const dni = document.querySelector("#buscarDni");
     let dniIngresado=dni.value;
     if(dniIngresado===null || dniIngresado==='')
-    {incompletoTostify("un DNI");}
-
+    {incompletoTostify("un DNI");
+    }else if(dniIngresado>=99999999){
+        incompletoTostify("un DNI válido");
+    }
     let turnero =JSON.parse(localStorage.getItem("turnero"));
     let siEsta=turnero.some((x)=>x.dni.indexOf(dniIngresado)!==-1);
     siEsta ? turnoEncontrado(dniIngresado) : incorrectoTostify();
