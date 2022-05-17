@@ -39,12 +39,14 @@ function saludoInicial(){
     });
 }
 
+//----------------AGREGAR UN TURNO-------------------------
+
 function nuevoTurno(){
     if(turnoCont===0){
         turnoCont=1;
         const agregarT = document.querySelector("#agregar");
         let nodoTurnoNom=document.createElement("p");
-        nodoTurnoNom.innerHTML=`Ingrese su nombre: <input id="nombre"></input><br></br>
+        nodoTurnoNom.innerHTML=`Ingrese su nombre: <input type"text" id="nombre"></input><br></br>
                         Ingrese su apellido: <input id="apellido"></input><br></br>
                         Ingrese su DNI: <input type="number" id="dni"></input><br></br>
                         Elija un servicio: <select id="servicio">
@@ -55,32 +57,24 @@ function nuevoTurno(){
                         <br></br>
                         <button id="reservarHtml">RESERVAR</button>
                         <button id="cerrarReserva">CERRAR</button>`;
-        console.log("nuevo turno");
         agregarT.appendChild(nodoTurnoNom);
         reservarTurno();  
     }
-    else{console.log("error");}
-    
 }
 
 function reservarTurno(){
     let btnReservar=document.querySelector("#reservarHtml");
     btnReservar.addEventListener("click",(event)=>{
-    event.preventDefault();
+        event.preventDefault();
+    
+        let nombre = document.querySelector("#nombre").value;
+        let apellido = document.querySelector("#apellido").value;
+        let dni = document.querySelector("#dni").value;
+        let servicio = document.querySelector("#servicio").value;
 
-    limpiarLista();
-    
-    let nombreInput = document.querySelector("#nombre");
-    let apellidoInput = document.querySelector("#apellido");
-    let dniInput = document.querySelector("#dni");
-    let servicioInput = document.querySelector("#servicio");
-    let nombre=nombreInput.value;
-    let apellido=apellidoInput.value;
-    let servicio=servicioInput.value;
-    let dni=dniInput.value;
-    
-    verificarContenido(nombre,apellido,dni,servicio);
-    limpiarReserva(nombreInput,apellidoInput,dniInput,servicioInput);
+        limpiarLista();
+        verificarContenido(nombre,apellido,dni,servicio);
+        limpiarReserva(nombre,apellido,dni,servicio);
     })
     const nodoBtnCerrar=document.getElementById("cerrarReserva");
     nodoBtnCerrar.addEventListener("click", ()=>{limpiarTurno()});
@@ -88,37 +82,32 @@ function reservarTurno(){
 
 function verificarContenido(nombre,apellido,dni,servicio){
     if(nombre===null || nombre===''){
-        
-        console.log("ingrese un nombre");
         reservaVacia=true;
         incompletoTostify("tu nombre");
+
     }else if(apellido===null || apellido===''){
-        
-        console.log("ingrese un apellido");
         reservaVacia=true;
         incompletoTostify("tu apellido");
+
     }else if(dni===null || dni===''){
-        console.log("ingrese un dni");
         reservaVacia=true;
         incompletoTostify("tu DNI");
+
     }else if(dni>=99999999){
-        console.log("dni grande")
         reservaVacia=true;
         incompletoTostify("un DNI válido");
 
-
     }else if(servicio===null || servicio===''){
-        console.log("ingrese un servicio");
         reservaVacia=true;
         incompletoTostify("un servicio");
 
     }else{
-        console.log("turno guardado");
         reservaVacia=false;
         subirTurno(nombre,apellido,dni,servicio);
         
     }
 }
+
 function subirTurno(nombre,apellido,dni,servicio)
 {
     if(!reservaVacia)
@@ -128,16 +117,10 @@ function subirTurno(nombre,apellido,dni,servicio)
         let turnero =JSON.parse(localStorage.getItem("turnero"));
         turnero.push(turno);
         localStorage.setItem("turnero",JSON.stringify(turnero));
-
-        console.log(turnero);
-        
         reservadoTostify();
-    }else{
-        console.log("incompleto");
-
-        incompletoTostify();
     }
 }
+
 function limpiarReserva(nombre,apellido,dni,servicio){
 
     nombre.value="";
@@ -147,43 +130,44 @@ function limpiarReserva(nombre,apellido,dni,servicio){
     reservaVacia=true;
 }
 
-function llamarPromesa(){
-    if(famososCont===0)
-    {
-        famososCont=1;
-        let url = 'https://fedeperin-harry-potter-api.herokuapp.com/personajes';
-        fetch(url)
-        .then((res)=>res.json())
-        .then((data)=>{mostrarFamosos(data);
-        console.log(data);
-        });
-    }else{console.log("error");}
-}
- 
-function mostrarFamosos(data)
+function limpiarTurno()
 {
-    const nodo = document.querySelector(".famosos");
-    const subtitulo=document.createElement("h3");
-    subtitulo.innerHTML="NUESTROS CLIENTES FAMOSOS";
-    nodo.appendChild(subtitulo);
-
-    data.forEach(element=>{
-    const div = document.createElement("div");
-    div.innerHTML=`${element.personaje}<br>`
-    nodo.appendChild(div);
-    });
-    crearCerrarFamosos();
+    const listaLimpia = document.querySelector("#agregar");
+    listaLimpia.innerHTML="";
+    turnoCont=0;
 }
 
-function crearCerrarFamosos()
+function incompletoTostify(campo)
 {
-    const nodo = document.querySelector(".famosos");
-    const btn=document.createElement("p");
-    btn.innerHTML=`<button id="cerrarFamosos">CERRAR</button>`;
-    nodo.appendChild(btn);
-    const nodoBtnCerrar=document.getElementById("cerrarFamosos");
-    nodoBtnCerrar.addEventListener("click", ()=>{limpiarFamosos()});
+    Toastify({
+        text: "Ingresa "+campo,
+        duration: 3000,
+        gravity: 'top',
+        position: 'right',
+        style: {                
+            background: "red",
+            width: "50%",
+            borderRadius: "20px",
+        }
+    }).showToast();
 }
+
+function reservadoTostify()
+{
+    Toastify({
+        text: "Reserva Exitosa",
+        duration: 3000,
+        gravity: 'top',
+        position: 'right',
+        style: {                
+            background: "green",
+            width: "80%",
+            borderRadius: "20px",
+        }
+    }).showToast();
+}
+
+//------------------------BUSCAR UN TURNO-------------------------
 
 function buscarTurno(){
     if(buscarCont===0)
@@ -194,32 +178,25 @@ function buscarTurno(){
         nodoBuscarTurno.innerHTML=`Ingrese su DNI: <input type="number" id="buscarDni"></input><br></br>
                                 <button id="buscarHtml">BUSCAR</button>
                                 <button id="cerrarBuscar">CERRAR</button>`;
-
-        console.log("buscar turno");
         buscarT.appendChild(nodoBuscarTurno);
         pedirDni();
         const nodoBtnCerrar=document.getElementById("cerrarBuscar");
         nodoBtnCerrar.addEventListener("click", ()=>{limpiarBuscar()});
-    }
-    else{console.log("error");}
-    
-    
+    } 
 }
 
 function pedirDni()
 {
     let buscarDni=document.querySelector("#buscarHtml");
-    buscarDni.addEventListener("click", ()=>{
-        console.log(buscarDni);
-        buscandoDni();
-    });    
+    buscarDni.addEventListener("click", ()=>{buscandoDni()});    
 }
 
 function buscandoDni(){
     const dni = document.querySelector("#buscarDni");
     let dniIngresado=dni.value;
     if(dniIngresado===null || dniIngresado==='')
-    {incompletoTostify("un DNI");
+    {
+        incompletoTostify("un DNI");
     }else if(dniIngresado>=99999999){
         incompletoTostify("un DNI válido");
     }
@@ -227,36 +204,6 @@ function buscandoDni(){
     let siEsta=turnero.some((x)=>x.dni.indexOf(dniIngresado)!==-1);
     siEsta ? turnoEncontrado(dniIngresado) : incorrectoTostify();
     dni.value="";
-}
-
-function limpiarBuscar()
-{
-    console.log("limpiar turno")
-    const listaLimpia = document.querySelector("#buscar");
-    listaLimpia.innerHTML="";
-    buscarCont=0;
-}
-
-function limpiarTurno()
-{
-    console.log("limpiar turno")
-    const listaLimpia = document.querySelector("#agregar");
-    listaLimpia.innerHTML="";
-    turnoCont=0;
-}
-
-function limpiarLista(){
-
-    const listaLimpia = document.querySelector("div");
-    listaLimpia.innerHTML="";
-    listaCont=0;
-}
-
-function limpiarFamosos(){
-
-    const listaLimpia = document.querySelector(".famosos");
-    listaLimpia.innerHTML="";
-    famososCont=0;
 }
 
 function turnoEncontrado(dniIngresado){
@@ -284,9 +231,8 @@ function encontradoTostify(){
             background: "green",
             width: "80%",
             borderRadius: "20px",
-         }
-     }).showToast();
-     console.log("encontrado con tostify")
+        }
+    }).showToast();
 }
 
 function incorrectoTostify()
@@ -300,49 +246,25 @@ function incorrectoTostify()
             background: "red",
             width: "80%",
             borderRadius: "20px",
-         }
-     }).showToast();
+        }
+    }).showToast();
 }
 
-function incompletoTostify(campo)
+function limpiarBuscar()
 {
-    console.log(campo);
-    Toastify({
-        text: "Ingresa "+campo,
-        duration: 3000,
-        gravity: 'top',
-        position: 'right',
-        style: {                
-            background: "red",
-            width: "50%",
-            borderRadius: "20px",
-         }
-     }).showToast();
+    const listaLimpia = document.querySelector("#buscar");
+    listaLimpia.innerHTML="";
+    buscarCont=0;
 }
 
-function reservadoTostify()
-{
-    Toastify({
-        text: "Reserva Exitosa",
-        duration: 3000,
-        gravity: 'top',
-        position: 'right',
-        style: {                
-            background: "green",
-            width: "80%",
-            borderRadius: "20px",
-         }
-     }).showToast();
-     console.log("reservado con tostify")
-}
+//------------------------LISTAR TURNOS-------------------------
 
 function listarTurnos()
-  {
+{
     if(listaCont===0)
     {
         listaCont=1;
         const lista = document.querySelector("#listar");
-      //localStorage.setItem("turnero",JSON.stringify(turnero));
         let turnero =JSON.parse(localStorage.getItem("turnero"));
         turnero.forEach(element => {
           const nodoLi=document.createElement("lu");
@@ -356,20 +278,71 @@ function listarTurnos()
         });
         const nodoBtnLimpiar=document.getElementById("btnLimpiar");
         nodoBtnLimpiar.addEventListener("click", ()=>{limpiarLista()});
-    }
-      
-  }
+    } 
+}
 
-  class Turno{
-      constructor(nombre,apellido,servicio,dni,fecha)
-      {
-          this.nombre=nombre;
-          this.apellido=apellido;
-          this.servicio=servicio;
-          this.dni=dni;
-          this.fecha=fecha;
-      }
-  }
+function limpiarLista(){
+    const listaLimpia = document.querySelector("div");
+    listaLimpia.innerHTML="";
+    listaCont=0;
+}
+
+//------------------------MOSTRAR FAMOSOS-------------------------
+
+function llamarPromesa(){
+    if(famososCont===0)
+    {
+        famososCont=1;
+        let url = 'https://fedeperin-harry-potter-api.herokuapp.com/personajes';
+        fetch(url)
+        .then((res)=>res.json())
+        .then((data)=>{mostrarFamosos(data)});
+    }
+}
+ 
+function mostrarFamosos(data)
+{
+    const nodo = document.querySelector(".famosos");
+    const subtitulo=document.createElement("h3");
+    subtitulo.innerHTML="NUESTROS CLIENTES FAMOSOS";
+    nodo.appendChild(subtitulo);
+    data.forEach(element=>{
+        const div = document.createElement("div");
+        div.innerHTML=`${element.personaje}<br>`
+        nodo.appendChild(div);
+    });
+    crearCerrarFamosos();
+}
+
+function crearCerrarFamosos()
+{
+    const nodo = document.querySelector(".famosos");
+    const btn=document.createElement("p");
+    btn.innerHTML=`<button id="cerrarFamosos">CERRAR</button>`;
+    nodo.appendChild(btn);
+    const nodoBtnCerrar=document.getElementById("cerrarFamosos");
+    nodoBtnCerrar.addEventListener("click", ()=>{limpiarFamosos()});
+}
+
+function limpiarFamosos(){
+
+    const listaLimpia = document.querySelector(".famosos");
+    listaLimpia.innerHTML="";
+    famososCont=0;
+}
+
+//---------------------------CONSTRUCTOR---------------------------
+
+class Turno{
+    constructor(nombre,apellido,servicio,dni,fecha)
+    {
+        this.nombre=nombre;
+        this.apellido=apellido;
+        this.servicio=servicio;
+        this.dni=dni;
+        this.fecha=fecha;
+    }
+}
 
 
 
