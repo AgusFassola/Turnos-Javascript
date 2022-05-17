@@ -1,6 +1,38 @@
 
 button{
-    color: blue;
-    border-radius: 10px;
+    color: rgb(43, 43, 153);
+    border-radius: 100px;
     margin-top: 10px;
+    height: 40px;
+    width: 150px;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    background: -webkit-gradient(linear, right top, left top, from(#00aee0), to(#c0f7f1));
+}
+h1{
+    color: #084c63;
+    
+}
+h2{
+    color: #0e475a;
+    font-family: 'Cairo', sans-serif;
+}
+p{
+    font-family: 'Raleway', sans-serif;
+    color: #033141;
+    font-size: 1.2rem;
+}
+lu{
+    font-size: 1.3rem;
+    font-family: 'Raleway', sans-serif;
+    color: #0a323f;
+}
+select{
+    font-size: 1.2rem;
+    font-family: 'Raleway', sans-serif;
+    color: #0a323f;
 }

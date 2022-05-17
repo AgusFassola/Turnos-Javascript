@@ -32,7 +32,7 @@ function init()
 function saludoInicial(){
 
     Swal.fire({
-        title: `BIENVENIDO A SYNERGY!`, 
+        title: `BIENVENIDO A SYNERGY`, 
         text: 'Reserva tu turno para entrenar',
         icon: 'success',
         confirmButtonText: 'Aceptar'
@@ -146,7 +146,7 @@ function incompletoTostify(campo)
         position: 'right',
         style: {                
             background: "red",
-            width: "50%",
+            width: "20%",
             borderRadius: "20px",
         }
     }).showToast();
@@ -161,7 +161,7 @@ function reservadoTostify()
         position: 'right',
         style: {                
             background: "green",
-            width: "80%",
+            width: "20%",
             borderRadius: "20px",
         }
     }).showToast();
@@ -202,11 +202,11 @@ function buscandoDni(){
     }
     let turnero =JSON.parse(localStorage.getItem("turnero"));
     let siEsta=turnero.some((x)=>x.dni.indexOf(dniIngresado)!==-1);
-    siEsta ? turnoEncontrado(dniIngresado) : incorrectoTostify();
+    siEsta ? turnoEncontr(dniIngresado) : incorrectoTostify();
     dni.value="";
 }
 
-function turnoEncontrado(dniIngresado){
+function turnoEncontr(dniIngresado){
     let turnero =JSON.parse(localStorage.getItem("turnero"));
     let turnoEncontrado=turnero.find((turno)=>turno.dni===dniIngresado);
     const busca = document.querySelector("#buscar");
@@ -229,7 +229,7 @@ function encontradoTostify(){
         position: 'right',
         style: {                
             background: "green",
-            width: "80%",
+            width: "20%",
             borderRadius: "20px",
         }
     }).showToast();
@@ -244,7 +244,7 @@ function incorrectoTostify()
         position: 'right',
         style: {                
             background: "red",
-            width: "80%",
+            width: "20%",
             borderRadius: "20px",
         }
     }).showToast();
@@ -303,11 +303,11 @@ function llamarPromesa(){
 function mostrarFamosos(data)
 {
     const nodo = document.querySelector(".famosos");
-    const subtitulo=document.createElement("h3");
+    const subtitulo=document.createElement("h2");
     subtitulo.innerHTML="NUESTROS CLIENTES FAMOSOS";
     nodo.appendChild(subtitulo);
     data.forEach(element=>{
-        const div = document.createElement("div");
+        const div = document.createElement("lu");
         div.innerHTML=`${element.personaje}<br>`
         nodo.appendChild(div);
     });
